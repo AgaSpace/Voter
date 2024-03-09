@@ -42,17 +42,5 @@ namespace Voter.Commands
                 line = $"У {(isMe ? "вас" : "игрока")} [c/00FF00:{pair.Item4}] очков. В конце месяца [c/FF0000:{pair.Item3}] сгорит.";
             args.Player.SendInfoMessage(line);
         }
-
-        internal static (double, double, double, double) votescount(string playerName)
-        {
-            int Selector(VoterList.Voter voter) => int.Parse(voter.Votes);
-            bool Predicate(VoterList.Voter voter) => voter.Nickname.ToLower() == playerName.ToLower();
-
-            double current = Current.Voters.Where(Predicate).Sum(Selector),
-                    previous = Previous.Voters.Where(Predicate).Sum(Selector) * Config!.Settings.ReductionCoefficient,
-                    flame = Math.Ceiling(current * (1 - Config.Settings.ReductionCoefficient)) + previous;
-
-            return (current, previous, flame, current + previous);
-        }
     }
 }
